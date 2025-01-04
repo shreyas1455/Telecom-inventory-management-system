@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('loginbi.jpg'); /* Replace with your image URL */
+            background-size: cover; /* Ensure the image covers the entire viewport */
+            background-position: center; /* Centers the background image */
+            background-attachment: fixed; /* Keeps the background fixed when scrolling */
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .auth-form {
+            background: rgba(255, 255, 255, 0.8); /* Add slight transparency to the form */
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            position: relative; /* Ensures form is on top of background */
+            z-index: 2;
+        }
+
+        .auth-form h2 {
+            margin-bottom: 1.5rem;
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .auth-form input[type="email"],
+        .auth-form input[type="password"] {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .auth-form .checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .auth-form .checkbox input {
+            margin-right: 0.5rem;
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .auth-form button:hover {
+            background: #45a049;
+        }
+
+        .auth-form .links {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .auth-form .links a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-form .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form class="auth-form" id="loginForm">
+        <h2>Sign In</h2>
+        <label for="staff_email">staff_email</label>
+        <input type="email" id="staff_email" name="staff_email" placeholder="Enter your email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+        <div class="checkbox">
+            <input type="checkbox" id="remember-me" name="remember-me">
+            <label for="remember-me">Remember Me</label>
+        </div>
+
+        <button type="submit">Login</button>
+
+        <div class="links">
+             <a href="signup.html">Sign Up</a>
+        </div>
+    </form>
+</div>
+<script>
+    // Add an event listener to the login form
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        // Get form inputs
+        const email = document.getElementById('staff_email').value;
+        const password = document.getElementById('password').value;
+
+        // Example validation (you can replace with actual validation logic)
+        if (email && password) {
+            // Simulate successful login and redirect to the dashboard
+            window.location.href = 'staffdashboard.html'; // Replace with your actual dashboard page link
+        } else {
+            alert('Please enter both email and password!');
+        }
+    });
+</script>
+
+</body>
+</html>

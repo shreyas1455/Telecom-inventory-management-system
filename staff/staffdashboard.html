@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIMS - Enhanced Staff Dashboard</title>
+    <style>
+        /* Theme Variables */
+        :root {
+            /* Light Theme Colors */
+            --primary-light: #2563eb;
+            --secondary-light: #64748b;
+            --background-light: #f8fafc;
+            --surface-light: #ffffff;
+            --text-primary-light: #1e293b;
+            --text-secondary-light: #64748b;
+            --border-light: #e2e8f0;
+            
+            /* Dark Theme Colors */
+            --primary-dark: #3b82f6;
+            --secondary-dark: #94a3b8;
+            --background-dark: #0f172a;
+            --surface-dark: #1e293b;
+            --text-primary-dark: #f8fafc;
+            --text-secondary-dark: #cbd5e1;
+            --border-dark: #334155;
+
+            /* Common Colors */
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+        }
+
+        /* Theme Application */
+        [data-theme="light"] {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --background: var(--background-light);
+            --surface: var(--surface-light);
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --border: var(--border-light);
+        }
+
+        [data-theme="dark"] {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --background: var(--background-dark);
+            --surface: var(--surface-dark);
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border: var(--border-dark);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Layout Components */
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: var(--space-md) var(--space-xl);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+            display: grid;
+            gap: var(--space-xl);
+        }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        /* Card Components */
+        .card {
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: var(--space-lg);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        /* Transaction Form */
+        .transaction-form {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .form-group {
+            display: grid;
+            gap: var(--space-sm);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input,
+        .form-select {
+            padding: var(--space-sm);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text-primary);
+            width: 100%;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-high { background: var(--success); }
+        .progress-medium { background: var(--warning); }
+        .progress-low { background: var(--danger); }
+
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface);
+            color: var(--text-primary);
+            padding: var(--space-sm);
+            border-radius: 4px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        /* Notifications */
+        .notification-center {
+            position: fixed;
+            bottom: var(--space-lg);
+            right: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            z-index: 1000;
+        }
+
+        .notification {
+            background: var(--surface);
+            color: var(--text-primary);
+            padding: var(--space-md);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-md);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: var(--space-md);
+            }
+
+            .notification-center {
+                left: var(--space-md);
+                right: var(--space-md);
+                bottom: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>TIMS Staff Dashboard</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-icon">🌓</span>
+                <span>Toggle Theme</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Stock Overview Section -->
+        <section class="dashboard-grid">
+            <div class="card">
+                <div class="metric-value">1,234</div>
+                <div class="metric-label">Total Items</div>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-high" style="width: 85%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="metric-value">15</div>
+                <div class="metric-label">Low Stock Items</div>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-medium" style="width: 45%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="metric-value">5</div>
+                <div class="metric-label">Out of Stock</div>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-low" style="width: 15%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transaction Form Section -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Stock Transaction</h2>
+            </div>
+            <form class="transaction-form" id="stockForm">
+                <div class="form-group">
+                    <label class="form-label">Product</label>
+                    <select class="form-select" required data-tooltip="Select the product for transaction">
+                        <option value="">Select Product</option>
+                        <option value="1">Network Router X1</option>
+                        <option value="2">Fiber Cable 50m</option>
+                        <option value="3">Wireless Headset Pro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Transaction Type</label>
+                    <select class="form-select" required data-tooltip="Choose transaction direction">
+                        <option value="">Select Type</option>
+                        <option value="in">Stock In</option>
+                        <option value="out">Stock Out</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" class="form-input" required min="1" 
+                           data-tooltip="Enter the quantity for transaction">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Transaction Date</label>
+                    <input type="date" class="form-input" required 
+                           data-tooltip="Select the transaction date">
+                </div>
+                <button type="submit" class="form-submit">Submit Transaction</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Notification Center -->
+    <div class="notification-center" id="notificationCenter"></div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+        }
+
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = notification notification-${type};
+            notification.textContent = message;
+            
+            const notificationCenter = document.getElementById('notificationCenter');
+            notificationCenter.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Form Validation
+        document.getElementById('stockForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Transaction processed successfully', 'success');
+        });
+
+        // Initialize with some demo notifications
+        setTimeout(() => {
+            showNotification('Low stock alert: Fiber Cable 50m', 'warning');
+        }, 2000);
+    </script>
+</body>
+</html>
